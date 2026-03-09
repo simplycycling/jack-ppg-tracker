@@ -9,7 +9,7 @@ import (
 
 const (
 	baseURL       = "https://api-web.nhle.com/v1"
-	HughesID      = 8481533
+	HughesID      = 8481559
 	DevilsTeamAbb = "NJD"
 )
 
