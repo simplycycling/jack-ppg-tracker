@@ -58,7 +58,6 @@ func main() {
     	fmt.Println("Warning: nextGame is nil, no upcoming game found")
 		} else {
     	fmt.Printf("Next game: %s on %s\n", nextGame.OpponentName(), nextGame.FormattedDate())
-		}
 	}
 
 	// 5. Compose post
