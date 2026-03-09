@@ -52,9 +52,13 @@ func main() {
 
 	// 4. Get next Devils game
 	nextGame, err := nhlClient.GetNextDevilsGame()
-	if err != nil {
-		// Non-fatal — post without next game info
-		fmt.Printf("Warning: could not get next game: %v\n", err)
+		if err != nil {
+    	fmt.Printf("Warning: could not get next game: %v\n", err)
+		} else if nextGame == nil {
+    	fmt.Println("Warning: nextGame is nil, no upcoming game found")
+		} else {
+    	fmt.Printf("Next game: %s on %s\n", nextGame.OpponentName(), nextGame.FormattedDate())
+		}
 	}
 
 	// 5. Compose post
