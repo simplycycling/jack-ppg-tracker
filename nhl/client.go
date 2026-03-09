@@ -180,11 +180,12 @@ type ScheduleTeam struct {
 func (c *Client) GetNextDevilsGame() (*ScheduleGame, error) {
 	loc, _ := time.LoadLocation("America/New_York")
 	today := time.Now().In(loc).Format("2006-01-02")
+	nextWeek := time.Now().In(loc).AddDate(0, 0, 7).Format("2006-01-02")
 
 	// Try this week and next week
-	for _, endpoint := range []string{"week/now", "week/next"} {
+	for _, endpoint := range []string{today, nextWeek} {
 		var sw ScheduleWeek
-		url := fmt.Sprintf("%s/club-schedule/%s/%s", baseURL, DevilsTeamAbb, endpoint)
+		url := fmt.Sprintf("%s/club-schedule/%s/week/%s", baseURL, DevilsTeamAbb, endpoint)
 		if err := c.get(url, &sw); err != nil {
 			continue
 		}
