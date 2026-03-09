@@ -52,24 +52,31 @@ type Team struct {
 	Score  int    `json:"score"`
 }
 
-// GetYesterdayDevilsGame returns the Devils game for yesterday if it's final, else nil.
-func (c *Client) GetYesterdayDevilsGame() (*Game, error) {
-	// Use today's date in ET (games are dated by ET start time)
+// GetLastDevilsGame returns the most recent final Devils game, checking
+// both today and yesterday in ET to catch late west coast games that
+// finished after midnight ET.
+func (c *Client) GetLastDevilsGame() (*Game, error) {
 	loc, _ := time.LoadLocation("America/New_York")
-	today := time.Now().In(loc).Format("2006-01-02")
+	now := time.Now().In(loc)
 
-	var sb Scoreboard
-	if err := c.get(fmt.Sprintf("%s/score/%s", baseURL, today), &sb); err != nil {
-		return nil, fmt.Errorf("scoreboard: %w", err)
-	}
-
-	for _, g := range sb.Games {
-		if g.HomeTeam.Abbrev == DevilsTeamAbb || g.AwayTeam.Abbrev == DevilsTeamAbb {
-			game := g
-			return &game, nil
+	for _, date := range []string{
+		now.Format("2006-01-02"),
+		now.AddDate(0, 0, -1).Format("2006-01-02"),
+	} {
+		var sb Scoreboard
+		if err := c.get(fmt.Sprintf("%s/score/%s", baseURL, date), &sb); err != nil {
+			return nil, fmt.Errorf("scoreboard for %s: %w", date, err)
+		}
+		for _, g := range sb.Games {
+			if g.HomeTeam.Abbrev == DevilsTeamAbb || g.AwayTeam.Abbrev == DevilsTeamAbb {
+				if g.IsFinal() {
+					game := g
+					return &game, nil
+				}
+			}
 		}
 	}
-	return nil, nil // no game today
+	return nil, nil // no recent final game found
 }
 
 func (g *Game) IsFinal() bool {
