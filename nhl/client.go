@@ -52,8 +52,8 @@ type Team struct {
 	Score  int    `json:"score"`
 }
 
-// GetTodayDevilsGame returns the Devils game for today if it's final, else nil.
-func (c *Client) GetTodayDevilsGame() (*Game, error) {
+// GetYesterdayDevilsGame returns the Devils game for yesterday if it's final, else nil.
+func (c *Client) GetYesterdayDevilsGame() (*Game, error) {
 	// Use today's date in ET (games are dated by ET start time)
 	loc, _ := time.LoadLocation("America/New_York")
 	today := time.Now().In(loc).Format("2006-01-02")
