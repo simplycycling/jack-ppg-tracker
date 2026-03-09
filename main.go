@@ -1,7 +1,7 @@
 package main
 
 import (
-	"time/tzdata"
+	_ "time/tzdata"
 	"fmt"
 	"log"
 	"os"
