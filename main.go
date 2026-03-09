@@ -22,7 +22,7 @@ func main() {
 	nhlClient := nhl.NewClient()
 
 	// 1. Check if Devils played today
-	game, err := nhlClient.GetTodayDevilsGame()
+	game, err := nhlClient.GetLastDevilsGame()
 	if err != nil {
 		log.Fatalf("Failed to get today's game: %v", err)
 	}
