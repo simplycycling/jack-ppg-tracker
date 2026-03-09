@@ -109,7 +109,7 @@ func buildPost(game *nhl.Game, gamePoints int, career *nhl.SeasonStats, nextGame
 	}
 
 	// Hashtag
-	sb.WriteString("\n\n#NJDevils")
+	sb.WriteString("#NJDevils")
 
 	return sb.String()
 }
