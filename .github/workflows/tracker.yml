@@ -1,7 +1,7 @@
 name: Jack Hughes PPG Tracker
 
 on:
-  # Runs at 12:30 AM ET nightly (5:30 AM UTC — covers EST and EDT)
+  # Runs every morning at 8am (EDT) or 9am (EST)
   schedule:
     - cron: "0 13 * * *"
   # Allow manual runs from the Actions tab
