@@ -190,6 +190,7 @@ func (c *Client) GetNextDevilsGame() (*ScheduleGame, error) {
 			continue
 		}
 		for _, g := range sw.Games {
+			fmt.Printf("Found game: %s vs %s on %s\n", g.HomeTeam.Abbrev, g.AwayTeam.Abbrev, g.GameDate)
 			if g.GameDate > today {
 				game := g
 				return &game, nil
