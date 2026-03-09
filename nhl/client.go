@@ -187,6 +187,7 @@ func (c *Client) GetNextDevilsGame() (*ScheduleGame, error) {
 		var sw ScheduleWeek
 		url := fmt.Sprintf("%s/club-schedule/%s/week/%s", baseURL, DevilsTeamAbb, endpoint)
 		if err := c.get(url, &sw); err != nil {
+			fmt.Printf("URL: %s, Games count: %d\n", url, len(sw.Games))
 			continue
 		}
 		for _, g := range sw.Games {
