@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rogerh/hughes-tracker/bluesky"
-	"github.com/rogerh/hughes-tracker/nhl"
+	"github.com/simplycycling/jack-ppg-tracker/bluesky"
+	"github.com/simplycycling/jack-ppg-tracker/nhl"
 )
 
 func main() {
