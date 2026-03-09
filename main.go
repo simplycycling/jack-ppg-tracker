@@ -85,9 +85,9 @@ func buildPost(game *nhl.Game, gamePoints int, career *nhl.SeasonStats, nextGame
 
 	// Tonight's game
 	if gamePoints == 0 {
-		sb.WriteString(fmt.Sprintf("Tonight vs %s: no points 😬\n\n", game.Opponent()))
+		sb.WriteString(fmt.Sprintf("Last game vs %s: no points 😬\n\n", game.Opponent()))
 	} else {
-		sb.WriteString(fmt.Sprintf("Tonight vs %s: %s 🔥\n\n",
+		sb.WriteString(fmt.Sprintf("Last game vs %s: %s 🔥\n\n",
 			game.Opponent(), pointsStr(gamePoints)))
 	}
 
@@ -107,6 +107,9 @@ func buildPost(game *nhl.Game, gamePoints int, career *nhl.SeasonStats, nextGame
 		sb.WriteString(fmt.Sprintf("\nNext up: vs %s on %s",
 			nextGame.OpponentName(), nextGame.FormattedDate()))
 	}
+
+	// Hashtag
+	sb.WriteString("\n\n#NJDevils")
 
 	return sb.String()
 }
