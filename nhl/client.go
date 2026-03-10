@@ -114,21 +114,21 @@ type PlayerGameStats struct {
 	Points   int `json:"points"`
 }
 
-func (c *Client) GetHughesGamePoints(gameID int) (int, error) {
+func (c *Client) GetHughesGamePoints(gameID int) (int, bool, error) {
 	var bs Boxscore
 	if err := c.get(fmt.Sprintf("%s/gamecenter/%d/boxscore", baseURL, gameID), &bs); err != nil {
-		return 0, err
+		return 0, false, err
 	}
 
 	// Hughes is always on NJD, search both home and away
 	for _, team := range []BoxscoreTeam{bs.PlayerByGameStats.HomeTeam, bs.PlayerByGameStats.AwayTeam} {
 		for _, p := range team.Forwards {
 			if p.PlayerID == HughesID {
-				return p.Points, nil
+				return p.Points, true, nil
 			}
 		}
 	}
-	return 0, nil // played but no points (or not in lineup — e.g. injured)
+	return 0, false, nil // not found in lineup — scratched or injured
 }
 
 // --- Player career stats ---

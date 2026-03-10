@@ -39,7 +39,7 @@ func main() {
 	fmt.Printf("Devils game vs %s is final.\n", game.Opponent())
 
 	// 2. Get Hughes' points in tonight's game
-	gamePoints, err := nhlClient.GetHughesGamePoints(game.ID)
+	gamePoints, played, err := nhlClient.GetHughesGamePoints(game.ID)
 	if err != nil {
 		log.Fatalf("Failed to get game stats: %v", err)
 	}
@@ -61,7 +61,7 @@ func main() {
 	}
 
 	// 5. Compose post
-	post := buildPost(game, gamePoints, career, nextGame)
+	post := buildPost(game, gamePoints, played, career, nextGame)
 	fmt.Println("Composed post:")
 	fmt.Println(post)
 
@@ -76,7 +76,7 @@ func main() {
 	fmt.Println("✅ Posted to Bluesky successfully.")
 }
 
-func buildPost(game *nhl.Game, gamePoints int, career *nhl.SeasonStats, nextGame *nhl.ScheduleGame) string {
+func buildPost(game *nhl.Game, gamePoints int, played bool, career *nhl.SeasonStats, nextGame *nhl.ScheduleGame) string {
 	gp := career.GamesPlayed
 	pts := career.Points
 	ppgGap := gp - pts // positive = points he still needs
@@ -87,7 +87,9 @@ func buildPost(game *nhl.Game, gamePoints int, career *nhl.SeasonStats, nextGame
 	sb.WriteString("🏒 Jack Hughes PPG Tracker\n\n")
 
 	// Tonight's game
-	if gamePoints == 0 {
+	if !played {
+		sb.WriteString("Jack didn't play last night 🏥\n\n")
+	} else if gamePoints == 0 {
 		sb.WriteString(fmt.Sprintf("Last game vs %s: no points 😬\n\n", game.Opponent()))
 	} else {
 		sb.WriteString(fmt.Sprintf("Last game vs %s: %s 🔥\n\n",
