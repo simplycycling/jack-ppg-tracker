@@ -1,5 +1,7 @@
 # Jack Hughes PPG Tracker 🏒😈
 
+(README is 100% AI generated)
+
 A Bluesky bot that tracks the inevitable, unstoppable, mathematically-certain journey of Jack Hughes — the most gifted hockey player of his generation, a generational talent so blindingly obvious that even casual fans stop mid-bite of their hot dog to watch him skate — toward becoming a points-per-game player in the NHL.
 
 ## What Is This?
