@@ -107,7 +107,7 @@ func buildPost(game *nhl.Game, gamePoints int, career *nhl.SeasonStats, nextGame
 
 	// Next game
 	if nextGame != nil {
-		sb.WriteString(fmt.Sprintf("\nNext up: vs %s on %s",
+		sb.WriteString(fmt.Sprintf("\nNext up: vs %s on %s\n",
 			nextGame.OpponentName(), nextGame.FormattedDate()))
 	}
 

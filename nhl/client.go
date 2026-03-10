@@ -187,9 +187,7 @@ func (c *Client) GetNextDevilsGame() (*ScheduleGame, error) {
 		var sw ScheduleWeek
 		url := fmt.Sprintf("%s/club-schedule/%s/week/%s", baseURL, DevilsTeamAbb, endpoint)
 		c.get(url, &sw) // ignore error, partial decode is fine
-    fmt.Printf("URL: %s, Games count: %d\n", url, len(sw.Games))
 		for _, g := range sw.Games {
-			fmt.Printf("Found game: %s vs %s on %s\n", g.HomeTeam.Abbrev, g.AwayTeam.Abbrev, g.GameDate)
 			if g.GameDate > today {
 				game := g
 				return &game, nil
