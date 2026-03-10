@@ -73,15 +73,75 @@ func (c *Client) Login() error {
 	return nil
 }
 
-// PostText creates a new text post on Bluesky.
+// Facet represents a rich text annotation in a Bluesky post.
+type Facet struct {
+	Index    FacetIndex     `json:"index"`
+	Features []FacetFeature `json:"features"`
+}
+
+type FacetIndex struct {
+	ByteStart int `json:"byteStart"`
+	ByteEnd   int `json:"byteEnd"`
+}
+
+type FacetFeature struct {
+	Type string `json:"$type"`
+	Tag  string `json:"tag"`
+}
+
+// extractHashtagFacets finds all #hashtags in text and returns facets with byte offsets.
+func extractHashtagFacets(text string) []Facet {
+	var facets []Facet
+	b := []byte(text)
+	i := 0
+	for i < len(b) {
+		if b[i] == '#' {
+			start := i
+			i++
+			tagStart := i
+			for i < len(b) && (isLetter(b[i]) || isDigit(b[i]) || b[i] == '_') {
+				i++
+			}
+			if i > tagStart {
+				tag := string(b[tagStart:i])
+				facets = append(facets, Facet{
+					Index: FacetIndex{ByteStart: start, ByteEnd: i},
+					Features: []FacetFeature{
+						{Type: "app.bsky.richtext.facet#tag", Tag: tag},
+					},
+				})
+			}
+		} else {
+			i++
+		}
+	}
+	return facets
+}
+
+func isLetter(c byte) bool {
+	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+}
+
+func isDigit(c byte) bool {
+	return c >= '0' && c <= '9'
+}
+
+// PostText creates a new text post on Bluesky, with hashtag facets automatically detected.
 func (c *Client) PostText(text string) error {
+	facets := extractHashtagFacets(text)
+
+	record := map[string]any{
+		"$type":     "app.bsky.feed.post",
+		"text":      text,
+		"createdAt": time.Now().UTC().Format(time.RFC3339),
+	}
+	if len(facets) > 0 {
+		record["facets"] = facets
+	}
+
 	return c.post("com.atproto.repo.createRecord", map[string]any{
 		"repo":       c.did,
 		"collection": "app.bsky.feed.post",
-		"record": map[string]any{
-			"$type":     "app.bsky.feed.post",
-			"text":      text,
-			"createdAt": time.Now().UTC().Format(time.RFC3339),
-		},
+		"record":     record,
 	}, nil)
 }
